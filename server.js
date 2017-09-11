@@ -1,7 +1,8 @@
 // server.js
 
 /* a simple web service
-  post json file, filter
+  post JSON data, filter that JSON data and return a few fields.
+  details see readme.md
 */
 "use strict";
 const express = require('express');
@@ -20,7 +21,7 @@ app.post('/', (req,res,next) =>{
   // check if request headers content-type is json format, if not throw 406 Not Acceptable error.
   if (req.headers['content-type'] !== 'application/json') {
     let err = new Error('Please set content-type to application/json and try again');
-    err.status = 406;
+    err.status = 400;
     next(err);
   }
 
@@ -42,13 +43,16 @@ app.post('/', (req,res,next) =>{
   });
 
   // send results back using json format
-  res.json(results);
+  res.json({
+    response: results
+  });
 });
 
 app.get('/', (req,res) => {
   res.json({test: "testing"});
 });
 
+// show error when user navi
 app.use((req,res,next) => {
   let err = new Error('Not Found');
   err.status = 404;
